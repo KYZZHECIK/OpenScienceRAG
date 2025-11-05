@@ -12,7 +12,8 @@ dependencies = [
     "numpy (>=2.3.4,<3.0.0)",
     "pyalex (>=0.18,<0.19)",
     "langchain (>=1.0.3,<2.0.0)",
-    "python-dotenv (>=1.2.1,<2.0.0)"
+    "python-dotenv (>=1.2.1,<2.0.0)",
+    "langchain-openai (>=1.0.2,<2.0.0)"
 ]
 
 
