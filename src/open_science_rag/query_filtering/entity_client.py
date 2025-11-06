@@ -1,7 +1,7 @@
 from typing import Any
 from src.open_science_rag.utils import get_secrets
 from src.open_science_rag.query_filtering.queries import QueryType
-from pyalex import Works, Authors, Institutions
+from pyalex import Works, Authors, Institutions, config
 
 
 Entity = Works | Authors | Institutions
@@ -19,8 +19,10 @@ class EntityClient:
             case "institutions": return Institutions()
             case _: raise ValueError("Unknown entity")
 
-    def run(self, q: QueryType) -> list[dict[str, Any]]:
-        entity: Entity = EntityClient._choose_entity(q.entity)
+    def build(self, q: QueryType) -> list[dict[str, Any]]:
+        entity = EntityClient._choose_entity(q.entity)
+        if self.mailto:
+            config.email = self.mailto
         if q.search:
             entity = entity.search(q.search)
         if q.filter:
@@ -29,7 +31,7 @@ class EntityClient:
             entity = entity.sort(q.sort)
         if q.select:
             entity = entity.select(q.select)
-        entity = entity.per_page(q.per_page)
-        if self.mailto:
-            entity = entity.mailto(self.mailto)
-        return entity.get()
+        return entity
+
+    def __call__(self, query: QueryType) -> list[dict[str, Any]]:
+        return self.build(query).get()

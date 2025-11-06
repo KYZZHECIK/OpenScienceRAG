@@ -9,4 +9,4 @@ class SearchService:
 
     def search(self, user_question: str):
         query = self.translator.translate(user_question)
-        return self.client.run(query)
+        return self.client(query)

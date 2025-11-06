@@ -5,10 +5,12 @@ from typing import NamedTuple
 
 class SECRETS(NamedTuple):
     open_alex_email: str
+    openai_api_key: str
 
 
 def get_secrets() -> SECRETS:
     load_dotenv()
     return SECRETS(
-        open_alex_email=os.environ["OPEN_ALEX_EMAIL"]
+        open_alex_email=os.environ["OPEN_ALEX_EMAIL"],
+        openai_api_key=os.environ["OPENAI_API_KEY"]
     )
