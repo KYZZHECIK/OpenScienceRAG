@@ -1,11 +1,11 @@
 from pydantic import BaseModel
-from typing import Optional, Literal, Any, Union
+from typing import Optional, Literal, Any
 
 
 class Query(BaseModel):
     entity: Any = "base_query_entity"
     search: Optional[str] = None
-    filter: Optional[str] = None
+    filter: Optional[dict[str, str]] = None
     sort: Optional[str] = None
 
     # FIXME: per_page is only used in .paginate(),
