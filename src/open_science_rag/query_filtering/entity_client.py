@@ -19,8 +19,8 @@ class EntityClient:
             case "institutions": return Institutions()
             case _: raise ValueError("Unknown entity")
 
-    def build(self, q: QueryType) -> list[dict[str, Any]]:
-        entity = EntityClient._choose_entity(q.entity)
+    def build(self, q: QueryType) -> Entity:
+        entity: Entity = EntityClient._choose_entity(q.entity)
         if self.mailto:
             config.email = self.mailto
         if q.search:
