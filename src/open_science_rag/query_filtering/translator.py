@@ -1,10 +1,11 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.runnables import Runnable
-from langchain_openai import ChatOpenAI
 from src.open_science_rag.query_filtering.queries import QueryWrapper, QueryType
-from src.open_science_rag.utils import get_secrets
-from typing import Optional, Any
+from typing import Any, TypeAlias, cast
+
+# We keep it as general as possible for easier test injections
+LLM: TypeAlias = Runnable[Any, Any]
 
 
 class QueryTranslator:
@@ -12,13 +13,14 @@ class QueryTranslator:
                     You are an AI language model assistant. Your task is to translate the
                     user question into a structured response describing the query(s) that
                     will be translated into the necessary API call. 
+
                     User question: {question}
+
+                    You MUST follow these formatting instructions EXACTLY:
+                    {format_instructions}
                     """
 
-    def __init__(self, model_name: str = "gpt-4o-mini", temperature: float = 0, llm: Optional[Runnable[Any, Any]] = None) -> None:
-        if llm is None:  # dependency injection for tests
-            get_secrets()  # this will set OPENAI_API_KEY environment variable for self.llm
-            llm = ChatOpenAI(model=model_name, temperature=temperature)
+    def __init__(self, llm: LLM) -> None:
         self.llm = llm
         self.parser = PydanticOutputParser(pydantic_object=QueryWrapper)
         self.prompt = ChatPromptTemplate.from_template(
@@ -26,7 +28,10 @@ class QueryTranslator:
         )
 
     def translate(self, user_question: str) -> QueryType:
-        chain = self.prompt | self.llm | self.parser
+        chain = cast(
+            Runnable[dict[str, str], QueryWrapper],
+            self.prompt | self.llm | self.parser,
+        )
         wrapper: QueryWrapper = chain.invoke({
             "question": user_question,
             "format_instructions": self.parser.get_format_instructions(),
