@@ -6,35 +6,23 @@ class Query(BaseModel):
     entity: Any = "base_query_entity"
     search: Optional[str] = None
     filter: Optional[dict[str, str]] = None
-    sort: Optional[str] = None
 
-    # FIXME: per_page is only used in .paginate(),
-    # if we do plain .get() we get the first page by default 25 entries
-    per_page: int = 20
-    # FIXME: Redo the select https://docs.openalex.org/how-to-use-the-api/get-lists-of-entities/select-fields
-    # Also, it is a list of str in PyAlex.
-    select: Optional[str] = None
+    # NOTE: Searching for keyword within filters (display name, title, fulltext, abstract, etc..)
+    # TODO: Check PyAlex + OpenAlex docs to find the exact keys used, add them
+    #       make the EntityClient build with adding .search_filter(filter="search value")
+    search_filter: Optional[dict[str, str]] = None
 
 
 class WorksQuery(Query):
     entity: Literal["works"] = "works"
-    select: Optional[str] = (
-        ""
-    )
 
 
 class AuthorsQuery(Query):
     entity: str = "authors"
-    select: Optional[str] = (
-        "id,display_name,works_count,affiliations"
-    )
 
 
 class InstitutionsQuery(Query):
     entity: str = "institutions"
-    select: Optional[str] = (
-        "id,display_name,works_count,ror"
-    )
 
 
 QueryType = WorksQuery | AuthorsQuery | InstitutionsQuery
