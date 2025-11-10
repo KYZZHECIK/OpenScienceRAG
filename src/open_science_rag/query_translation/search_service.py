@@ -1,5 +1,5 @@
-from src.open_science_rag.query_filtering.translator import QueryTranslator
-from src.open_science_rag.query_filtering.entity_client import EntityClient
+from src.open_science_rag.query_translation.translator import QueryTranslator
+from src.open_science_rag.query_translation.entity_client import EntityClient
 
 
 class SearchService:

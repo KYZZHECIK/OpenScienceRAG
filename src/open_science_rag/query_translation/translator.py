@@ -1,7 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.runnables import Runnable
-from src.open_science_rag.query_filtering.queries import QueryWrapper, QueryType
+from src.open_science_rag.query_translation.queries import QueryWrapper, QueryType
 from typing import Any, TypeAlias, cast
 
 # We keep it as general as possible for easier test injections

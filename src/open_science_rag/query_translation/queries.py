@@ -11,6 +11,7 @@ class Query(BaseModel):
     # TODO: Check PyAlex + OpenAlex docs to find the exact keys used, add them
     #       make the EntityClient build with adding .search_filter(filter="search value")
     search_filter: Optional[dict[str, str]] = None
+    select: Optional[str] = None
 
 
 class WorksQuery(Query):
@@ -18,11 +19,11 @@ class WorksQuery(Query):
 
 
 class AuthorsQuery(Query):
-    entity: str = "authors"
+    entity: Literal["authors"] = "authors"
 
 
 class InstitutionsQuery(Query):
-    entity: str = "institutions"
+    entity: Literal["institutions"] = "institutions"
 
 
 QueryType = WorksQuery | AuthorsQuery | InstitutionsQuery

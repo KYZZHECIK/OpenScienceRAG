@@ -1,6 +1,6 @@
 from typing import Any, Protocol, cast
 from src.open_science_rag.utils import get_secrets
-from src.open_science_rag.query_filtering.queries import QueryType
+from src.open_science_rag.query_translation.queries import QueryType
 from pyalex import Works, Authors, Institutions, config
 
 

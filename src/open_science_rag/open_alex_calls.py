@@ -1,6 +1,6 @@
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from langchain_openai import ChatOpenAI
-import src.open_science_rag.query_filtering.search_service as QFiltering
+import src.open_science_rag.query_translation.search_service as QTranslation
 from src.open_science_rag.utils import get_secrets
 
 parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
@@ -17,9 +17,9 @@ if __name__ == '__main__':
     get_secrets()
     llm = ChatOpenAI(model=args.model_name, temperature=args.model_temperature)
 
-    service = QFiltering.SearchService(
-        translator=QFiltering.QueryTranslator(llm=llm),
-        entity_client=QFiltering.EntityClient()
+    service = QTranslation.SearchService(
+        translator=QTranslation.QueryTranslator(llm=llm),
+        entity_client=QTranslation.EntityClient()
     )
 
     results = service.search(args.user_question)
